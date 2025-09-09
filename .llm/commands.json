@@ -1,0 +1,14 @@
+{
+  "owkg-ingest": {
+    "prompt": "Ingest two sample documents into OpenWorld-KnowledgeGraphs",
+    "command": "owkg docs ingest --paths data/doc1.txt data/doc2.txt --db db/owkg.db"
+  },
+  "owkg-build-retriever": {
+    "prompt": "Build TF-IDF retriever index",
+    "command": "owkg retriever build --db db/owkg.db --artifact artifacts/tfidf.pkl"
+  },
+  "owkg-triage-question": {
+    "prompt": "Ask a question via agent",
+    "command": "owkg agents ask --question \"Explain graphs and RAG\" --backend dummy"
+  }
+}

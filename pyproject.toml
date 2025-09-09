@@ -1,0 +1,102 @@
+[build-system]
+requires = ["hatchling>=1.21.1"]
+build-backend = "hatchling.build"
+
+[project]
+name = "openworld-knowledgegraphs"
+version = "0.1.0"
+description = "OpenWorld-KnowledgeGraphs: RAG + Knowledge Graphs with Agents (OpenAI, Ollama, llm), sqlite-utils, and Datasette"
+readme = "README.md"
+requires-python = ">=3.9"
+license = "MIT"
+authors = [{ name = "OpenWorld-KnowledgeGraphs Contributors" }]
+keywords = ["knowledge-graph", "rag", "retrieval", "llm", "agents", "datasette", "sqlite-utils", "openworld"]
+classifiers = [
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+  "Framework :: FastAPI",
+]
+
+dependencies = [
+  "typer>=0.9.0",
+  "rich>=12.0.0",
+  "structlog>=22.0.0",
+  "pydantic>=2.0.0",
+  "pydantic-settings>=2.0.0",
+  "fastapi>=0.100.0",
+  "uvicorn>=0.20.0",
+  "httpx>=0.24.0",
+  "numpy>=1.21.0",
+  "pandas>=1.5.0",
+  "scikit-learn>=1.2.0",
+  "sqlite-utils>=3.30",
+  "datasette>=0.60.0",
+  "networkx>=3.0,<3.3",
+  "python-dotenv>=1.0.0",
+]
+
+[project.optional-dependencies]
+agents = [
+  "openai>=1.0.0",
+  "ollama>=0.1.0",
+  "llm>=0.10",
+  "llm-ollama>=0.3",
+]
+dev = [
+  "pytest>=7.0.0",
+  "pytest-cov>=4.0.0",
+  "tox>=4.0.0",
+  "ruff>=0.1.0",
+  "mypy>=1.0.0",
+  "pre-commit>=3.0.0",
+  "anyio>=3.6.0",
+  "commitizen>=3.0.0",
+]
+
+[project.scripts]
+owkg = "openworld_knowledgegraphs.cli:app"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/openworld_knowledgegraphs"]
+
+[tool.hatch.envs.default]
+features = ["dev"]
+
+[tool.hatch.envs.default.scripts]
+fmt = "ruff format ."
+lint = "ruff check ."
+typecheck = "mypy src"
+test = "pytest --cov=src --cov-report=term-missing --cov-fail-under=100"
+serve = "uvicorn openworld_knowledgegraphs.api.app:app --reload --port 8000"
+changelog = "cz changelog"
+bump = "cz bump --changelog"
+
+[tool.coverage.run]
+branch = true
+source = ["src/openworld_knowledgegraphs"]
+
+[tool.coverage.report]
+show_missing = true
+fail_under = 100
+
+[tool.ruff]
+line-length = 100
+extend-select = ["E", "F", "I", "UP"]
+target-version = "py39"
+
+[tool.mypy]
+python_version = "3.9"
+warn_unused_configs = true
+strict = true
+exclude = ["tests/"]
+
+[tool.commitizen]
+name = "cz_conventional_commits"
+version = "0.1.0"
+version_files = ["pyproject.toml:version"]
+tag_format = "v$version"
+update_changelog_on_bump = true
